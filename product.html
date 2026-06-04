@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Kenneth Mart</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="notification" class="notification" hidden></div>
+
+    <header>
+        <div>
+            <h1>Kenneth Mart</h1>
+            <p>Product details and checkout</p>
+        </div>
+        <div class="header-actions">
+            <span id="auth-status">Not logged in</span>
+            <span class="cart-pill">Cart: <span id="cart-count">0</span></span>
+            <button onclick="window.location.href='index.html'">Back to Store</button>
+        </div>
+    </header>
+
+    <main class="container single-column">
+        <div class="detail-container" id="details-container">
+            <p class="message">Loading product details...</p>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
