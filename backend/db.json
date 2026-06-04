@@ -1,0 +1,150 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "boAt Rockerz Wireless Headphones",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+      "description": "Comfortable wireless headphones with clear bass, Bluetooth support, and long battery backup."
+    },
+    {
+      "id": 2,
+      "name": "Fastrack Analog Watch",
+      "price": 2499,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500",
+      "description": "Stylish everyday watch with a clean dial, strong strap, and premium casual look."
+    },
+    {
+      "id": 3,
+      "name": "RGB Mechanical Keyboard",
+      "price": 3499,
+      "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500",
+      "description": "Mechanical keyboard with tactile keys, RGB lights, and a strong build for gaming and study."
+    },
+    {
+      "id": 4,
+      "name": "Samsung Galaxy Backpack",
+      "price": 1299,
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500",
+      "description": "Lightweight backpack with laptop space, bottle holder, and daily college-friendly storage."
+    },
+    {
+      "id": 5,
+      "name": "Noise Smart Watch",
+      "price": 2799,
+      "image": "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500",
+      "description": "Smart watch with fitness tracking, call alerts, heart-rate monitoring, and modern display."
+    },
+    {
+      "id": 6,
+      "name": "Portronics Fast Charger",
+      "price": 899,
+      "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500",
+      "description": "Compact fast charger suitable for phones, tablets, and daily travel use."
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Kenneth",
+      "email": "test@user.com",
+      "password": "password123"
+    },
+    {
+      "id": 2,
+      "name": "ansel kenneth",
+      "email": "anselfran06@gmail.com",
+      "password": "22345678"
+    },
+    {
+      "id": 3,
+      "name": "ansel",
+      "email": "niggs@gmail.com",
+      "password": "1234"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "userId": 2,
+      "items": [
+        {
+          "productId": 2,
+          "name": "Fastrack Analog Watch",
+          "price": 2499,
+          "quantity": 1,
+          "subtotal": 2499
+        }
+      ],
+      "total": 2499,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "date": "2026-06-04T15:43:48.574Z"
+    },
+    {
+      "id": 2,
+      "userId": 3,
+      "items": [
+        {
+          "productId": 2,
+          "name": "Fastrack Analog Watch",
+          "price": 2499,
+          "quantity": 1,
+          "subtotal": 2499
+        },
+        {
+          "productId": 4,
+          "name": "Samsung Galaxy Backpack",
+          "price": 1299,
+          "quantity": 1,
+          "subtotal": 1299
+        }
+      ],
+      "total": 3798,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "date": "2026-06-04T16:30:43.042Z"
+    },
+    {
+      "id": 3,
+      "userId": 3,
+      "items": [
+        {
+          "productId": 2,
+          "name": "Fastrack Analog Watch",
+          "price": 2499,
+          "quantity": 1,
+          "subtotal": 2499
+        },
+        {
+          "productId": 4,
+          "name": "Samsung Galaxy Backpack",
+          "price": 1299,
+          "quantity": 1,
+          "subtotal": 1299
+        }
+      ],
+      "total": 3798,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "date": "2026-06-04T16:30:43.053Z"
+    },
+    {
+      "id": 4,
+      "userId": 3,
+      "items": [
+        {
+          "productId": 2,
+          "name": "Fastrack Analog Watch",
+          "price": 2499,
+          "quantity": 2,
+          "subtotal": 4998
+        }
+      ],
+      "total": 4998,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "date": "2026-06-04T16:30:48.303Z"
+    }
+  ]
+}
