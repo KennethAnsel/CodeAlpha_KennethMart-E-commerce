@@ -1,4 +1,7 @@
-const API_URL = 'http://localhost:5000/api';
+// Detect environment and set API URL
+let API_URL = 'http://localhost:5000/api';
+const isGitHubPages = window.location.hostname.includes('github.io');
+
 const CART_KEY = 'kenneth_mart_cart';
 const USER_KEY = 'kenneth_mart_user';
 
@@ -10,14 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
 
     if (document.getElementById('products-container')) {
-        fetchProducts();
-        bindAuthForms();
+        if (isGitHubPages) {
+            document.getElementById('products-container').innerHTML = '<p class="message error">GitHub Pages cannot run the backend server. This demo works locally only. To run locally:<br><br>1. Clone: git clone https://github.com/KennethAnsel/CodeAlpha_KennethMart-E-commerce.git<br>2. Install: cd backend && npm install<br>3. Start: npm start<br>4. Visit: http://localhost:5000</p>';
+        } else {
+            fetchProducts();
+            bindAuthForms();
+        }
     }
 
     const detailsContainer = document.getElementById('details-container');
     if (detailsContainer) {
-        const productId = new URLSearchParams(window.location.search).get('id');
-        productId ? fetchProductDetail(productId) : showProductError('Product ID missing.');
+        if (isGitHubPages) {
+            detailsContainer.innerHTML = '<p class="message error">GitHub Pages requires the backend to run locally.</p>';
+        } else {
+            const productId = new URLSearchParams(window.location.search).get('id');
+            productId ? fetchProductDetail(productId) : showProductError('Product ID missing.');
+        }
     }
 });
 
