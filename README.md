@@ -35,7 +35,22 @@ The backend serves the frontend statically at `http://localhost:5000` and expose
 2. Open the site
 
 - Option A — open from the backend: visit `http://localhost:5000` in your browser.
-- Option B — use VS Code Live Server: open `frontend/index.html` with Go Live. (If you use Live Server, start the backend as above because the frontend fetches data from `http://localhost:5000/api`.)
+- Option B — use VS Code Live Server: open `frontend/index.html` with Go Live. The frontend now automatically points local localhost pages to `http://localhost:5000/api`, so you still need the backend running, but you do not need to edit the API URL.
+
+### Vercel deployment
+
+This repository now includes a Vercel-compatible backend in the `api/` folder.
+
+- Deploy the repo to Vercel as a static site plus serverless functions.
+- The frontend will call `/api` on the same origin when it is hosted on Vercel.
+- The API routes available on Vercel are the same as the local Express backend:
+  - `GET /api/products`
+  - `GET /api/products/:id`
+  - `POST /api/register`
+  - `POST /api/login`
+  - `POST /api/orders`
+
+Note: the Vercel API uses in-memory state for demo purposes, so new users and orders are not durable across cold starts or redeploys. The local Express backend still persists changes in `backend/db.json`.
 
 ## GitHub Pages
 

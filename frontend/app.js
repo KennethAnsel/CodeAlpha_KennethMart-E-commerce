@@ -16,6 +16,12 @@ function resolveApiUrl() {
         return 'http://localhost:5000/api';
     }
 
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        if (window.location.port && window.location.port !== '5000') {
+            return 'http://localhost:5000/api';
+        }
+    }
+
     return `${window.location.origin}/api`;
 }
 
