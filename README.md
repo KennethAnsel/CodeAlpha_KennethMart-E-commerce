@@ -43,6 +43,20 @@ The repository now includes a root-level `index.html` and `product.html`, which 
 
 Important: GitHub Pages is static hosting, so the Express backend in `backend/server.js` will not run there. That means product loading, login/register, and checkout work locally when the backend is running, but not on GitHub Pages unless you host the backend separately and point `frontend/app.js` to that backend URL.
 
+## Frontend API configuration
+
+- **Auto-detection:** The frontend now resolves the API base automatically from the current site origin (i.e. `window.location.origin + '/api'`). This makes the client work when served by the backend (for example at `http://localhost:5000`) or when deployed with a backend under the same origin.
+
+- **file:// fallback:** If you open the HTML files directly from the filesystem (protocol `file:`), the frontend falls back to `http://localhost:5000/api` so local development using the backend still works.
+
+- **Overrides:** You can override the API base in two ways:
+  - Set a global `window.API_URL` (for advanced embedding), e.g. in a script tag before `app.js`.
+  - Append the `apiUrl` query parameter to the page URL, for example:
+
+    `index.html?apiUrl=https://your-deployed-backend.example.com/api`
+
+These changes are implemented in `frontend/app.js` so you can point the frontend at any backend URL without editing the source file.
+
 ## API Endpoints
 
 - `GET /api/products` — list products
