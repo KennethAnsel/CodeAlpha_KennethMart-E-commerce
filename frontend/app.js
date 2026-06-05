@@ -1,6 +1,25 @@
 // Detect environment and set API URL
-let API_URL = 'http://localhost:5000/api';
 const isGitHubPages = window.location.hostname.includes('github.io');
+
+function resolveApiUrl() {
+    const urlOverride = new URLSearchParams(window.location.search).get('apiUrl');
+
+    if (urlOverride) {
+        return urlOverride.replace(/\/$/, '');
+    }
+
+    if (window.API_URL) {
+        return String(window.API_URL).replace(/\/$/, '');
+    }
+
+    if (window.location.protocol === 'file:') {
+        return 'http://localhost:5000/api';
+    }
+
+    return `${window.location.origin}/api`;
+}
+
+const API_URL = resolveApiUrl();
 
 const CART_KEY = 'kenneth_mart_cart';
 const USER_KEY = 'kenneth_mart_user';
