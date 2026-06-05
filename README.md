@@ -37,6 +37,12 @@ The backend serves the frontend statically at `http://localhost:5000` and expose
 - Option A — open from the backend: visit `http://localhost:5000` in your browser.
 - Option B — use VS Code Live Server: open `frontend/index.html` with Go Live. (If you use Live Server, start the backend as above because the frontend fetches data from `http://localhost:5000/api`.)
 
+## GitHub Pages
+
+The repository now includes a root-level `index.html` and `product.html`, which is what GitHub Pages expects.
+
+Important: GitHub Pages is static hosting, so the Express backend in `backend/server.js` will not run there. That means product loading, login/register, and checkout work locally when the backend is running, but not on GitHub Pages unless you host the backend separately and point `frontend/app.js` to that backend URL.
+
 ## API Endpoints
 
 - `GET /api/products` — list products

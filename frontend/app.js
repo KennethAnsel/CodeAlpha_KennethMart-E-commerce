@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : null;
 const CART_KEY = 'kenneth_mart_cart';
 const USER_KEY = 'kenneth_mart_user';
 
@@ -10,14 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
 
     if (document.getElementById('products-container')) {
-        fetchProducts();
-        bindAuthForms();
+        if (!API_URL) {
+            document.getElementById('products-container').innerHTML = '<p class="message error">This store requires a backend server. Please clone the repository and run: cd backend && npm install && npm start, then visit http://localhost:5000</p>';
+        } else {
+            fetchProducts();
+            bindAuthForms();
+        }
     }
 
     const detailsContainer = document.getElementById('details-container');
     if (detailsContainer) {
-        const productId = new URLSearchParams(window.location.search).get('id');
-        productId ? fetchProductDetail(productId) : showProductError('Product ID missing.');
+        if (!API_URL) {
+            detailsContainer.innerHTML = '<p class="message error">Product details require the backend server. Please run it locally.</p>';
+        } else {
+            const productId = new URLSearchParams(window.location.search).get('id');
+            productId ? fetchProductDetail(productId) : showProductError('Product ID missing.');
+        }
     }
 });
 
