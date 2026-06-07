@@ -27,6 +27,15 @@ function resolveApiUrl() {
 
 const API_URL = resolveApiUrl();
 
+function resolvePageUrl(pageName) {
+    const currentPath = window.location.pathname;
+    const pathPrefix = currentPath.endsWith('/')
+        ? currentPath
+        : currentPath.slice(0, currentPath.lastIndexOf('/') + 1);
+
+    return `${window.location.origin}${pathPrefix}${pageName}`;
+}
+
 const CART_KEY = 'kenneth_mart_cart';
 const USER_KEY = 'kenneth_mart_user';
 
@@ -84,7 +93,11 @@ async function fetchProducts() {
 }
 
 function viewDetails(id) {
-    window.location.href = `product.html?id=${id}`;
+    window.location.href = `${resolvePageUrl('product.html')}?id=${id}`;
+}
+
+function goToStore() {
+    window.location.href = resolvePageUrl('index.html');
 }
 
 // Loading one product for the details page

@@ -242,7 +242,11 @@ function handleGetOrders(res) {
 }
 
 async function handleRequest(req, res, pathname) {
-    const normalizedPath = pathname.replace(/\/$/, '');
+    // Force the pathname to ALWAYS start with '/api' for consistent route matching on Vercel deployments
+    let normalizedPath = pathname.replace(/\/$/, '');
+    if (!normalizedPath.startsWith('/api')) {
+        normalizedPath = '/api' + (normalizedPath.startsWith('/') ? normalizedPath : '/' + normalizedPath);
+    }
 
     if (req.method === 'OPTIONS') {
         handleOptions(res);
