@@ -95,3 +95,4 @@ These changes are implemented in `frontend/app.js` so you can point the frontend
 
 ---
 Created for internship demonstration — Kenneth Mart
+Vercel- https://code-alpha-kenneth-mart-e-commerce.vercel.app/
