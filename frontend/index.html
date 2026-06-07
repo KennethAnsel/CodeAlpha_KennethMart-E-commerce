@@ -1,97 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenneth Mart - E-Commerce Store</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenneth Mart — Shop Smart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="notification" class="notification" hidden></div>
-
-    <header>
-        <div>
-            <h1>Kenneth Mart</h1>
-            <p>Electronics, fashion and daily essentials</p>
-        </div>
-        <div class="header-actions">
-            <span id="auth-status">Not logged in</span>
-            <span class="cart-pill">Cart: <span id="cart-count">0</span></span>
-            <button id="logout-btn" onclick="logout()" hidden>Logout</button>
-        </div>
-    </header>
-
-    <main class="container">
-        <section class="store-area">
-            <section class="hero">
-                <div>
-                    <h2>Shop smart products at Indian prices</h2>
-                    <p>Fast checkout with UPI, card and cash on delivery options.</p>
-                </div>
-                <div class="hero-offer">
-                    <span>Weekend Sale</span>
-                    <strong>Up to 40% off</strong>
-                </div>
-            </section>
-
-            <section class="service-strip">
-                <span>Free delivery above Rs. 999</span>
-                <span>UPI accepted</span>
-                <span>Cash on delivery</span>
-                <span>Easy replacement</span>
-            </section>
-
-            <section class="auth-panel" id="auth-forms">
-                <form id="login-form">
-                    <h2>Login</h2>
-                    <input id="login-email" type="email" placeholder="Email" value="test@user.com" required>
-                    <input id="login-password" type="password" placeholder="Password" value="password123" required>
-                    <button type="submit">Login</button>
-                </form>
-
-                <form id="register-form">
-                    <h2>Register</h2>
-                    <input id="register-name" type="text" placeholder="Full name" required>
-                    <input id="register-email" type="email" placeholder="Email" required>
-                    <input id="register-password" type="password" placeholder="Password" required>
-                    <button type="submit">Register</button>
-                </form>
-            </section>
-
-            <section class="products-grid" id="products-container">
-                <p class="message">Loading products...</p>
-            </section>
-        </section>
-
-        <aside class="cart-panel">
-            <h2>Order Summary</h2>
-            <div id="cart-items"></div>
-            <p class="cart-total">Total: <span id="cart-total">Rs. 0</span></p>
-
-            <div class="payment-box">
-                <h3>Payment Method</h3>
-                <label>
-                    <input type="radio" name="payment-method" value="UPI" checked>
-                    UPI / Google Pay / PhonePe
-                </label>
-                <label>
-                    <input type="radio" name="payment-method" value="Card">
-                    Debit or Credit Card
-                </label>
-                <label>
-                    <input type="radio" name="payment-method" value="Cash on Delivery">
-                    Cash on Delivery
-                </label>
-            </div>
-
-            <button class="checkout-btn" onclick="checkout()">Place Order</button>
-        </aside>
-    </main>
-
-    <footer>
-        <p>Kenneth Mart - BCA Sem 2 E-Commerce Project</p>
-    </footer>
-
-    <script src="app.js"></script>
+ 
+<!-- Notification toast -->
+<div id="notification" class="notification hidden"></div>
+ 
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">Kenneth<span class="dot">.</span>Mart</a>
+  <div class="nav-right">
+    <span id="nav-username" class="nav-user"></span>
+    <a id="nav-login"    href="login.html"    class="nav-link hide-sm">Login</a>
+    <a id="nav-register" href="register.html" class="nav-link hide-sm">Register</a>
+    <button id="nav-logout" class="nav-link" onclick="logout()" style="display:none">Logout</button>
+    <button class="btn-cart" onclick="document.getElementById('cart-section').scrollIntoView({behavior:'smooth'})">
+      🛒 Cart&nbsp;<span class="cart-badge" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span>Now live in India</div>
+  <h1>Your everyday store,<br><span class="hi">built different.</span></h1>
+  <p>Electronics, accessories and daily essentials at honest Indian prices — checkout with UPI in seconds.</p>
+  <div class="hero-btns">
+    <a href="#products" class="btn btn-primary">Browse Products →</a>
+    <a href="register.html" class="btn btn-secondary">Create Free Account</a>
+  </div>
+</section>
+ 
+<!-- SERVICE STRIP -->
+<div class="strip">
+  <div class="strip-item"><span>✓</span> Free delivery above ₹999</div>
+  <div class="strip-item"><span>✓</span> UPI / PhonePe / GPay</div>
+  <div class="strip-item"><span>✓</span> Cash on delivery</div>
+  <div class="strip-item"><span>✓</span> 7-day easy replacement</div>
+</div>
+ 
+<!-- MAIN -->
+<div class="page-main">
+ 
+  <!-- LEFT: Products -->
+  <section>
+    <div class="section-label">Catalogue</div>
+    <div class="section-title" id="products">All Products</div>
+    <div class="products-grid" id="products-container">
+      <div class="msg">Loading products...</div>
+    </div>
+  </section>
+ 
+  <!-- RIGHT: Cart -->
+  <aside id="cart-section">
+    <div class="cart-panel">
+      <div class="cart-panel-title">
+        Order Summary <span id="cart-count-label"></span>
+      </div>
+ 
+      <div id="cart-items">
+        <p class="cart-empty">Your cart is empty.</p>
+      </div>
+ 
+      <div class="cart-total-row">
+        Total <span id="cart-total">₹0</span>
+      </div>
+ 
+      <div class="payment-section">
+        <h4>Payment Method</h4>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="UPI" checked>
+          UPI / Google Pay / PhonePe
+        </label>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="Card">
+          Debit or Credit Card
+        </label>
+        <label class="pay-opt">
+          <input type="radio" name="payment" value="Cash on Delivery">
+          Cash on Delivery
+        </label>
+      </div>
+ 
+      <button id="checkout-btn" class="btn btn-success btn-full" onclick="checkout()">Place Order</button>
+      <p style="font-size:0.72rem;color:var(--muted);text-align:center;margin-top:10px;">
+        <a href="login.html">Login</a> required to place order
+      </p>
+    </div>
+  </aside>
+ 
+</div>
+ 
+<!-- FOOTER -->
+<footer>
+  <strong>Kenneth Mart</strong> — BCA Sem 2 Full Stack E-Commerce Project &nbsp;·&nbsp; Built with Node.js + Express
+</footer>
+ 
+<script src="app.js"></script>
+<script>initIndex();</script>
 </body>
 </html>
+ 

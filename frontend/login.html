@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Kenneth Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ 
+<div id="notification" class="notification hidden"></div>
+ 
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">Kenneth<span class="dot">.</span>Mart</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">← Back to Store</a>
+  </div>
+</nav>
+ 
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Log in to your Kenneth Mart account</p>
+ 
+    <div id="form-error" class="form-err"></div>
+ 
+    <form id="login-form" autocomplete="on">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email"
+               placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+               placeholder="Your password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:0.75rem">
+        Log in →
+      </button>
+    </form>
+ 
+    <div class="auth-divider">
+      Don't have an account? <a href="register.html">Create one free</a>
+    </div>
+ 
+    <div class="test-creds">
+      <strong>Test account:</strong><br>
+      Email: test@user.com<br>
+      Password: password123
+    </div>
+  </div>
+</div>
+ 
+<script src="app.js"></script>
+<script>initLogin();</script>
+</body>
+</html>
+ 

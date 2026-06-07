@@ -61,6 +61,18 @@
       "name": "ansel",
       "email": "niggs@gmail.com",
       "password": "1234"
+    },
+    {
+      "id": 4,
+      "name": "ansel",
+      "email": "niggasignh@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": 5,
+      "name": "Ansel Kenneth Francis",
+      "email": "niggasih@gmail.com",
+      "password": "123679"
     }
   ],
   "orders": [
@@ -145,6 +157,51 @@
       "paymentMethod": "UPI",
       "paymentStatus": "Paid",
       "date": "2026-06-04T16:30:48.303Z"
+    },
+    {
+      "id": 5,
+      "userId": 5,
+      "items": [
+        {
+          "productId": 1,
+          "name": "boAt Rockerz Wireless Headphones",
+          "price": 1999,
+          "quantity": 4,
+          "subtotal": 7996
+        },
+        {
+          "productId": 2,
+          "name": "Fastrack Analog Watch",
+          "price": 2499,
+          "quantity": 2,
+          "subtotal": 4998
+        },
+        {
+          "productId": 6,
+          "name": "Portronics Fast Charger",
+          "price": 899,
+          "quantity": 2,
+          "subtotal": 1798
+        },
+        {
+          "productId": 5,
+          "name": "Noise Smart Watch",
+          "price": 2799,
+          "quantity": 2,
+          "subtotal": 5598
+        },
+        {
+          "productId": 4,
+          "name": "Samsung Galaxy Backpack",
+          "price": 1299,
+          "quantity": 2,
+          "subtotal": 2598
+        }
+      ],
+      "total": 22988,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "date": "2026-06-07T17:25:45.418Z"
     }
   ]
 }
