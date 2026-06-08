@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Details — Kenneth Mart</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Kenneth Mart</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
- 
-<div id="notification" class="notification hidden"></div>
- 
-<nav class="navbar">
-  <a class="nav-logo" href="index.html">Kenneth<span class="dot">.</span>Mart</a>
-  <div class="nav-right">
-    <span id="nav-username" class="nav-user"></span>
-    <a id="nav-login"    href="login.html"  class="nav-link hide-sm">Login</a>
-    <a id="nav-register" href="register.html" class="nav-link hide-sm">Register</a>
-    <button id="nav-logout" class="nav-link" onclick="logout()" style="display:none">Logout</button>
-    <button class="btn-cart" onclick="window.location.href='index.html'">
-      🛒 Cart&nbsp;<span class="cart-badge" id="cart-count">0</span>
-    </button>
-  </div>
-</nav>
- 
-<div class="detail-page">
-  <div id="details-container">
-    <div class="msg">Loading product...</div>
-  </div>
-</div>
- 
-<footer>
-  <strong>Kenneth Mart</strong> — BCA Sem 2 Full Stack E-Commerce Project
-</footer>
- 
-<script src="app.js"></script>
-<script>initProduct();</script>
+    <div id="notification" class="notification" hidden></div>
+
+    <header>
+        <div>
+            <h1>Kenneth Mart</h1>
+            <p>Product details and checkout</p>
+        </div>
+        <div class="header-actions">
+            <span id="auth-status">Not logged in</span>
+            <span class="cart-pill">Cart: <span id="cart-count">0</span></span>
+            <button onclick="goToStore()">Back to Store</button>
+        </div>
+    </header>
+
+    <main class="container single-column">
+        <div class="detail-container" id="details-container">
+            <p class="message">Loading product details...</p>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
 </body>
 </html>
- 

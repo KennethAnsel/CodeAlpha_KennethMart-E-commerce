@@ -1,34 +1,44 @@
 /* =============================================
    KENNETH MART — app.js
-   All frontend logic in one file
+   Works on: localhost:5000, VS Code Live Server,
+             Vercel deployment, any domain
    ============================================= */
 
-// ── 1. API URL Detection ──────────────────────
+// ── API URL — smart detection ─────────────────
 function resolveApiUrl() {
-  const param = new URLSearchParams(window.location.search).get('apiUrl');
-  if (param) return param.replace(/\/$/, '');
-  if (window.API_URL) return String(window.API_URL).replace(/\/$/, '');
-  if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
   const h = window.location.hostname;
-  if (h === 'localhost' || h === '127.0.0.1') {
-    if (window.location.port && window.location.port !== '5000')
-      return 'http://localhost:5000/api';
+  const port = window.location.port;
+  const proto = window.location.protocol;
+
+  // file:// → must use local backend
+  if (proto === 'file:') return 'http://localhost:5000/api';
+
+  // Live Server default ports (5500, 5501, 3000, 8080, 8000) → proxy to backend
+  const livePorts = ['5500', '5501', '3000', '8080', '8000', '4200'];
+  if ((h === 'localhost' || h === '127.0.0.1') && livePorts.includes(port)) {
+    return 'http://localhost:5000/api';
   }
+
+  // Running on localhost:5000 (backend serves frontend directly)
+  if ((h === 'localhost' || h === '127.0.0.1') && port === '5000') {
+    return 'http://localhost:5000/api';
+  }
+
+  // Vercel or any other deployed domain → same origin /api
   return window.location.origin + '/api';
 }
 
 const API = resolveApiUrl();
-const isGitHubPages = window.location.hostname.includes('github.io');
 
-// ── 2. Storage Keys ───────────────────────────
+// Storage keys
 const CART_KEY = 'km_cart';
 const USER_KEY = 'km_user';
 
-// ── 3. State ──────────────────────────────────
+// State
 let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
 let user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
 
-// ── 4. Helpers ────────────────────────────────
+// ── Helpers ───────────────────────────────────
 function fmt(n) {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency', currency: 'INR', maximumFractionDigits: 0
@@ -36,6 +46,7 @@ function fmt(n) {
 }
 
 function pageUrl(name) {
+  // Works whether pages are in /frontend/ (Vercel) or root (localhost:5000)
   const p = window.location.pathname;
   const dir = p.endsWith('/') ? p : p.slice(0, p.lastIndexOf('/') + 1);
   return window.location.origin + dir + name;
@@ -50,7 +61,7 @@ function notify(msg, type = 'success') {
   window._nt = setTimeout(() => { el.className = 'notification hidden'; }, 3500);
 }
 
-// ── 5. Cart Logic ─────────────────────────────
+// ── Cart ──────────────────────────────────────
 function saveCart() {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
@@ -80,12 +91,10 @@ function changeQty(id, delta) {
 }
 
 async function renderCart() {
-  // Update badge
   const badge = document.getElementById('cart-count');
   const total = cart.reduce((s, i) => s + i.quantity, 0);
   if (badge) badge.textContent = total;
 
-  // Cart panel (only on index page)
   const itemsEl = document.getElementById('cart-items');
   const totalEl = document.getElementById('cart-total');
   if (!itemsEl || !totalEl) return;
@@ -121,11 +130,11 @@ async function renderCart() {
 
     totalEl.textContent = fmt(grandTotal);
   } catch {
-    itemsEl.innerHTML = '<p style="color:var(--red);font-size:.8rem">Could not load prices.</p>';
+    itemsEl.innerHTML = '<p style="color:var(--red);font-size:.8rem">Could not load prices. Is the backend running?</p>';
   }
 }
 
-// ── 6. Checkout ───────────────────────────────
+// ── Checkout ──────────────────────────────────
 async function checkout() {
   if (!user) { notify('Please login before placing an order.', 'error'); return; }
   if (cart.length === 0) { notify('Your cart is empty.', 'error'); return; }
@@ -146,16 +155,16 @@ async function checkout() {
     if (!res.ok) {
       notify(data.message || 'Order failed.', 'error');
     } else {
-      notify('Order #' + String(data.order.id).padStart(4,'0') + ' placed! Payment: ' + data.order.paymentMethod);
+      notify('Order #' + String(data.order.id).padStart(4, '0') + ' placed! via ' + data.order.paymentMethod);
       cart = []; saveCart(); renderCart();
     }
   } catch {
-    notify('Server error. Is the backend running?', 'error');
+    notify('Cannot reach server. Is the backend running?', 'error');
   }
   if (btn) { btn.disabled = false; btn.textContent = 'Place Order'; }
 }
 
-// ── 7. Nav Auth UI ────────────────────────────
+// ── Auth UI ───────────────────────────────────
 function updateNavAuth() {
   const nameEl  = document.getElementById('nav-username');
   const loginA  = document.getElementById('nav-login');
@@ -172,28 +181,22 @@ function logout() {
   user = null;
   localStorage.removeItem(USER_KEY);
   updateNavAuth();
-  notify('Logged out.');
+  notify('Logged out successfully.');
 }
 
-// ── 8. Index Page ─────────────────────────────
+// ── Index Page ────────────────────────────────
 async function initIndex() {
   updateNavAuth();
   renderCart();
-
-  if (isGitHubPages) {
-    document.getElementById('products-container').innerHTML =
-      '<div class="msg error">GitHub Pages cannot run the backend server.<br>Run locally: <code>cd backend &amp;&amp; npm install &amp;&amp; npm start</code> then visit http://localhost:5000</div>';
-    return;
-  }
   await loadProducts();
 }
 
 async function loadProducts() {
   const el = document.getElementById('products-container');
   el.innerHTML = '<div class="msg">Loading products...</div>';
-
   try {
     const res = await fetch(API + '/products');
+    if (!res.ok) throw new Error('bad response');
     const products = await res.json();
 
     el.innerHTML = products.map(p => `
@@ -208,12 +211,18 @@ async function loadProducts() {
           <div class="product-price">${fmt(p.price)}</div>
           <div class="card-btns">
             <button class="btn btn-ghost" onclick="goToProduct(${p.id})">Details</button>
-            <button class="btn btn-success" onclick="addToCart(${p.id}, '${p.name.replace(/'/g,"\\'")}')">Add to Cart</button>
+            <button class="btn btn-success" onclick="addToCart(${p.id}, '${p.name.replace(/'/g, "\\'")}')">Add to Cart</button>
           </div>
         </div>
       </div>`).join('');
-  } catch {
-    el.innerHTML = '<div class="msg error">Cannot load products. Make sure the backend is running.</div>';
+  } catch (err) {
+    el.innerHTML = `
+      <div class="msg error" style="grid-column:1/-1">
+        <strong>Cannot connect to backend.</strong><br><br>
+        If using VS Code Live Server, you also need to run the backend:<br>
+        <code style="display:block;margin:8px 0;padding:8px;background:rgba(0,0,0,.3);border-radius:6px">cd backend &amp;&amp; node server.js</code>
+        Then open <a href="http://localhost:5000" style="color:var(--accent2)">http://localhost:5000</a> instead of Live Server.
+      </div>`;
   }
 }
 
@@ -221,32 +230,22 @@ function goToProduct(id) {
   window.location.href = pageUrl('product.html') + '?id=' + id;
 }
 
-// ── 9. Product Detail Page ────────────────────
+// ── Product Detail Page ───────────────────────
 async function initProduct() {
   updateNavAuth();
   renderCart();
 
   const container = document.getElementById('details-container');
-
-  if (isGitHubPages) {
-    container.innerHTML = '<div class="msg error">GitHub Pages requires local backend.</div>';
-    return;
-  }
-
   const id = new URLSearchParams(window.location.search).get('id');
   if (!id) {
-    container.innerHTML = '<div class="msg error">No product ID in URL.</div>';
+    container.innerHTML = '<div class="msg error">No product ID found in URL.</div>';
     return;
   }
 
   container.innerHTML = '<div class="msg">Loading product...</div>';
-
   try {
     const res = await fetch(API + '/products/' + id);
-    if (!res.ok) {
-      container.innerHTML = '<div class="msg error">Product not found.</div>';
-      return;
-    }
+    if (!res.ok) throw new Error('not found');
     const p = await res.json();
 
     container.innerHTML = `
@@ -262,22 +261,21 @@ async function initProduct() {
             <span class="badge">✓ 7-day replacement</span>
             <span class="badge">✓ Secure payment</span>
           </div>
-          <button class="btn btn-success btn-full" onclick="addToCart(${p.id}, '${p.name.replace(/'/g,"\\'")}')">
+          <button class="btn btn-success btn-full" onclick="addToCart(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
             Add to Cart
           </button>
         </div>
       </div>`;
   } catch {
-    container.innerHTML = '<div class="msg error">Unable to load product.</div>';
+    container.innerHTML = '<div class="msg error">Product not found. <a href="index.html">Go back to store</a></div>';
   }
 }
 
-// ── 10. Login Page ────────────────────────────
+// ── Login Page ────────────────────────────────
 function initLogin() {
-  // Already logged in → go to store
   if (user) { window.location.href = pageUrl('index.html'); return; }
 
-  document.getElementById('login-form').addEventListener('submit', async function(e) {
+  document.getElementById('login-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const btn = this.querySelector('button[type=submit]');
     const errEl = document.getElementById('form-error');
@@ -295,33 +293,29 @@ function initLogin() {
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
-
       if (!res.ok) {
         errEl.textContent = data.message || 'Login failed.';
         errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Log in';
+        btn.disabled = false; btn.textContent = 'Log in';
         return;
       }
-
       user = data.user;
       localStorage.setItem(USER_KEY, JSON.stringify(user));
       notify('Welcome back, ' + user.name + '!');
-      setTimeout(() => window.location.href = pageUrl('index.html'), 600);
+      setTimeout(() => window.location.href = pageUrl('index.html'), 500);
     } catch {
-      errEl.textContent = 'Server error. Is the backend running?';
+      errEl.textContent = 'Cannot connect to server. Run: cd backend && node server.js';
       errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Log in';
+      btn.disabled = false; btn.textContent = 'Log in';
     }
   });
 }
 
-// ── 11. Register Page ─────────────────────────
+// ── Register Page ─────────────────────────────
 function initRegister() {
   if (user) { window.location.href = pageUrl('index.html'); return; }
 
-  document.getElementById('register-form').addEventListener('submit', async function(e) {
+  document.getElementById('register-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const btn = this.querySelector('button[type=submit]');
     const errEl = document.getElementById('form-error');
@@ -341,8 +335,7 @@ function initRegister() {
       errEl.style.display = 'block'; return;
     }
 
-    btn.disabled = true;
-    btn.textContent = 'Creating account...';
+    btn.disabled = true; btn.textContent = 'Creating account...';
 
     try {
       const res  = await fetch(API + '/register', {
@@ -351,34 +344,30 @@ function initRegister() {
         body: JSON.stringify({ name, email, password })
       });
       const data = await res.json();
-
       if (!res.ok) {
         errEl.textContent = data.message || 'Registration failed.';
         errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Create account';
+        btn.disabled = false; btn.textContent = 'Create account';
         return;
       }
-
       notify('Account created! Please log in.');
-      setTimeout(() => window.location.href = pageUrl('login.html'), 700);
+      setTimeout(() => window.location.href = pageUrl('login.html'), 600);
     } catch {
-      errEl.textContent = 'Server error. Is the backend running?';
+      errEl.textContent = 'Cannot connect to server. Run: cd backend && node server.js';
       errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Create account';
+      btn.disabled = false; btn.textContent = 'Create account';
     }
   });
 }
 
-// ── Expose to HTML onclick attributes ─────────
-window.addToCart    = addToCart;
+// ── Expose globals ────────────────────────────
+window.addToCart      = addToCart;
 window.removeFromCart = removeFromCart;
-window.changeQty    = changeQty;
-window.checkout     = checkout;
-window.logout       = logout;
-window.goToProduct  = goToProduct;
-window.initIndex    = initIndex;
-window.initProduct  = initProduct;
-window.initLogin    = initLogin;
-window.initRegister = initRegister;
+window.changeQty      = changeQty;
+window.checkout       = checkout;
+window.logout         = logout;
+window.goToProduct    = goToProduct;
+window.initIndex      = initIndex;
+window.initProduct    = initProduct;
+window.initLogin      = initLogin;
+window.initRegister   = initRegister;

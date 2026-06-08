@@ -1,0 +1,17 @@
+{
+  "name": "kenneth-mart",
+  "version": "1.0.0",
+  "description": "Kenneth Mart E-Commerce Store",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
